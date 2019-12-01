@@ -1,7 +1,8 @@
 var {User, validate} = require('../models/user');
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
+var _ = require('lodash');
+const bcrypt = require('bcrypt');
 
 
 /* POST new user. */
@@ -16,8 +17,11 @@ router.post('/', async function(req, res, next){
      
   user = new User(req.body);
 
+  const salt =  bcrypt.genSaltSync(10);
+  user.password = bcrypt.hashSync(user.password, salt);  
+
   await user.save();
-  res.send(user);
+  res.send(_.pick(user,['_id', 'email']));
 
 
 })
