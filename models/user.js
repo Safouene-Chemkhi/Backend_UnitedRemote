@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var Joi = require('joi');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 var userSchema = new mongoose.Schema({
     email: {
@@ -26,6 +28,11 @@ userSchema.pre('save', function(next){
     if(!this.created_at) created_at = current_date;
     next();
 });
+
+userSchema.methods.generateAuthToken = function name(params) {
+    const token = jwt.sign({_id : this._id, isAdmin : this.isAdmin},config.get('jwtPrivateKey'));
+    return token;
+}
 
 function validateUser(user){
     const schema = {

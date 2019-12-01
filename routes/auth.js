@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 var _ = require('lodash');
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
 
 /* POST new user. */
 router.post('/', async function (req, res, next) {
@@ -17,6 +17,10 @@ router.post('/', async function (req, res, next) {
 
     const validPassword =  bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(400).send('Invalid email or password.');
+    
+    token = user.generateAuthToken();
+    res.header('x-auth-token',token).send( _.pick(user, ['_id', 'email', 'liked_shops']));
+ 
 })
 
 function validate(req) {

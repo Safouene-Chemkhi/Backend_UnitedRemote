@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+const config = require('config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -15,7 +16,16 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
+if(!config.get('jwtPrivateKey')){
+  console.error('FATAL ERROR: jwtPrivateKey is not defined.');
+  process.exit(1);
+}
+
+
 // connecting to the mongodb
+mongoose.set('useUnifiedTopology', true);
+mongoose.set('useNewUrlParser', true);
 mongoose.connect('mongodb://localhost/remote_united', {
   useCreateIndex: true,
   useNewUrlParser: true
