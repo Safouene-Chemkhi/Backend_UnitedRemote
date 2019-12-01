@@ -4,6 +4,7 @@ var router = express.Router();
 var _ = require('lodash');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Joi = require('joi');
 
 /* POST new user. */
 router.post('/', async function (req, res, next) {
@@ -23,7 +24,7 @@ router.post('/', async function (req, res, next) {
  
 })
 
-function validate(req) {
+function validate(user) {
     const schema = {
         email: Joi.string().min(8).max(255).required().email(),
         password: Joi.string().min(8).max(255).required()
