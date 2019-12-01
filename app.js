@@ -20,7 +20,7 @@ mongoose.connect('mongodb://localhost/remote_united', {
   useNewUrlParser: true
 })
   .then(() => console.log('Connected to MongoDB...'))
-  .catch((err) => console.log('Could not connect to MongoDb :/ \n', err));
+  .catch((err) => console.error('Could not connect to MongoDb :/ \n', err));
 
 app.use(logger('dev'));
 app.use(express.json());
